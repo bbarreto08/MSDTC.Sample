@@ -14,6 +14,10 @@ When you perform database operations across different servers or databases withi
 
 ---
 
+![Flow](https://raw.githubusercontent.com/bbarreto08/MSDTC.Sample/refs/heads/main/docs/msdtc.png)
+
+---
+
 ## Prerequisites
 
 Before running the application, ensure that:

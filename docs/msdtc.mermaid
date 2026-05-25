@@ -1,0 +1,56 @@
+---
+config:
+  layout: fixed
+---
+flowchart TB
+ subgraph subGraph0["Phase 1: Prepare Phase"]
+        DBA["SQL Server A"]
+        DTC["MSDTC Coordinator"]
+        DBB["SQL Server B"]
+  end
+ subgraph subGraph1["Phase 2: Commit Phase"]
+        DTC_Commit["MSDTC orders Commit"]
+        Decisao{"Did all databases<br>respond OK?"}
+        DBA_Commit["SQL Server A<br>Release Locks"]
+        DBB_Commit["SQL Server B<br>Release Locks"]
+        App_Sucesso["Transaction Completed"]
+  end
+ subgraph subGraph2["Phase 2: Rollback Phase"]
+        DTC_Rollback["MSDTC orders Rollback"]
+        DBA_Abort["SQL Server A<br>Release Locks"]
+        DBB_Abort["SQL Server B<br>Release Locks"]
+        App_Erro["TransactionAbortedException"]
+  end
+    App["C# Application<br>scope.Complete"] -- "1. Request Commit" --> DTC
+    DTC -- "2a. Send 'Prepare'" --> DBA
+    DTC -- "2b. Send 'Prepare'" --> DBB
+    DBA -- "3a. Respond 'Ready'" --> DTC
+    DBB -- "3b. Respond 'Ready'" --> DTC
+    DTC --> Decisao
+    Decisao -- Yes --> DTC_Commit
+    DTC_Commit -- "4a. Permanent Write" --> DBA_Commit
+    DTC_Commit -- "4b. Permanent Write" --> DBB_Commit
+    DBA_Commit --> App_Sucesso
+    DBB_Commit --> App_Sucesso
+    Decisao -- "No / Time-out" --> DTC_Rollback
+    DTC_Rollback -- "4c. Undo changes" --> DBA_Abort
+    DTC_Rollback -- "4d. Undo changes" --> DBB_Abort
+    DBA_Abort --> App_Erro
+    DBB_Abort --> App_Erro
+
+     DBA:::db
+     DTC:::msdtc
+     DBB:::db
+     DTC_Commit:::msdtc
+     DBA_Commit:::db
+     DBB_Commit:::db
+     App_Sucesso:::app
+     DTC_Rollback:::alert
+     DBA_Abort:::db
+     DBB_Abort:::db
+     App_Erro:::alert
+     App:::app
+    classDef app fill:#1f77b4,stroke:#333,stroke-width:2px,color:#fff
+    classDef msdtc fill:#ff7f0e,stroke:#333,stroke-width:2px,color:#fff
+    classDef db fill:#2ca02c,stroke:#333,stroke-width:2px,color:#fff
+    classDef alert fill:#d62728,stroke:#333,stroke-width:2px,color:#fff

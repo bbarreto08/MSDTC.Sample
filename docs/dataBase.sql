@@ -1,0 +1,18 @@
+CREATE DATABASE SampleA;
+CREATE DATABASE SampleB;
+
+USE SampleA;
+
+CREATE TABLE Client(
+	ClientId	INT PRIMARY KEY IDENTITY,
+	Name		VARCHAR(50) NOT NULL
+);
+
+----
+
+USE SampleB;
+
+CREATE TABLE AuditClient(
+	AuditClientId	INT PRIMARY KEY IDENTITY,
+	Menssage		VARCHAR(50) NOT NULL
+);

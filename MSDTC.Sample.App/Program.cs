@@ -37,19 +37,33 @@ namespace MSDTC.Sample.App
 
                     commandA.ExecuteNonQuery();
                 }
-                using (var connectionB = new SqlConnection(connectionSampleB))
-                {
-                    connectionB.Open();
-                    var commandB = connectionB.CreateCommand();
-                    commandB.CommandText = @"   INSERT INTO AuditClient
-                                                VALUES('Client AuditClient');";
 
-                    commandB.ExecuteNonQuery();
+                if (FeatureFlags.IsAuditClientQueue)
+                {
+                    Console.WriteLine("Feature flag 'AuditClientQueue' is enabled.");
+                    SendToQueue();
+                }
+                else
+                {
+                    using (var connectionB = new SqlConnection(connectionSampleB))
+                    {
+                        connectionB.Open();
+                        var commandB = connectionB.CreateCommand();
+                        commandB.CommandText = @"   INSERT INTO AuditClient
+                                                    VALUES('Client AuditClient');";
+
+                        commandB.ExecuteNonQuery();
+                    }
                 }
 
                 scope.Complete();
                 Console.WriteLine("Transaction completed successfully.");
             }
+        }
+
+        private static void SendToQueue()
+        {
+            Console.WriteLine("Send to Queue");
         }
     }
 }

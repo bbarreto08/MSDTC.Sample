@@ -8,6 +8,9 @@ CREATE TABLE Client(
 	Name		VARCHAR(50) NOT NULL
 );
 
+ALTER TABLE Client ADD CONSTRAINT UQ_Client_Name UNIQUE (Name);
+
+
 ----
 
 USE SampleB;

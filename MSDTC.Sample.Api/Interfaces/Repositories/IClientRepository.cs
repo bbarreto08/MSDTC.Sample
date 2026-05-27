@@ -3,5 +3,6 @@
     public interface IClientRepository
     {
         int AddClient(string name);
+        int GetClientByName(string name);
     }
 }

@@ -1,4 +1,5 @@
 <Solution>
   <Project Path="MSDTC.Sample.Api/MSDTC.Sample.Api.csproj" Id="b72d3a2b-5bb7-4378-9745-434ae198db19" />
   <Project Path="MSDTC.Sample.App/MSDTC.Sample.App.csproj" Id="650750ab-dbae-4f7a-bbd3-59821375ff3b" />
+  <Project Path="MSDTC.Sample.Tests/MSDTC.Sample.Tests.csproj" Id="117ea8f5-914f-49d0-b1b1-61afae10fb5a" />
 </Solution>

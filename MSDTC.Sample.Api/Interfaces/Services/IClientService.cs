@@ -2,6 +2,6 @@
 {
     public interface IClientService
     {
-        string AddClient(string name);
+        int AddClient(string name);
     }
 }

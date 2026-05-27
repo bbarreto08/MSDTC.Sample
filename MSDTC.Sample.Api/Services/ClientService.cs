@@ -15,17 +15,24 @@ namespace MSDTC.Sample.Api.Services
             _auditClientRepository = auditClientRepository;
         }
 
-        public string AddClient(string name)
+        public int AddClient(string name)
         {
             int id;
             using (var scope = new TransactionScope())
             {
+                var checkClient = _clientRepository.GetClientByName(name);
+
+                if (checkClient != 0)
+                    return 0;
+
                 id = _clientRepository.AddClient(name);
+
                 _auditClientRepository.AddAuditClient($"New client added with id: {id}");
+                
                 scope.Complete();
             }
 
-            return $"New client added with id: {id}";
+            return id;
         }
     }
 }

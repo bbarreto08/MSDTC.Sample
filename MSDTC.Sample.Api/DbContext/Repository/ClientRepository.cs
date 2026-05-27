@@ -33,10 +33,44 @@ namespace MSDTC.Sample.Api.DbContext.Repository
 
                 commandA.Parameters.AddWithValue("@message", name);
 
-                newId = Convert.ToInt32(commandA.ExecuteScalar());
+                try
+                {
+                    newId = Convert.ToInt32(commandA.ExecuteScalar());
+                }
+                catch (Exception)
+                {
+                    return 0;
+                }
+                
             }
 
             return newId;
+        }
+
+        public int GetClientByName(string name)
+        {
+            int clientId = 0;
+
+            using (var connectionA = new SqlConnection(_connectionString))
+            {
+                connectionA.Open();
+                var commandA = connectionA.CreateCommand();
+                commandA.CommandText = $@"  SELECT *
+                                            FROM Client c
+                                            WHERE c.Name = @name
+                                        ";
+
+                commandA.Parameters.AddWithValue("@name", name);
+
+                var result = commandA.ExecuteReader();
+
+                if (result.Read())
+                {
+                    clientId = Convert.ToInt32(result["ClientId"]);
+                }
+            }
+
+            return clientId;
         }
     }
 }

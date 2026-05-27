@@ -1,5 +1,6 @@
 using Autofac;
 using Autofac.Integration.WebApi;
+using MSDTC.Sample.Api.App_Start;
 using MSDTC.Sample.Api.DbContext.Repository;
 using MSDTC.Sample.Api.Interfaces.Repositories;
 using MSDTC.Sample.Api.Interfaces.Services;
@@ -7,6 +8,8 @@ using MSDTC.Sample.Api.Services;
 using System.Configuration;
 using System.Reflection;
 using System.Web.Http;
+using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace MSDTC.Sample.Api
 {
@@ -14,6 +17,9 @@ namespace MSDTC.Sample.Api
     {
         protected void Application_Start()
         {
+            AreaRegistration.RegisterAllAreas();
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+
             GlobalConfiguration.Configure(WebApiConfig.Register);
 
             var builder = new ContainerBuilder();

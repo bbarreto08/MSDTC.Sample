@@ -1,4 +1,5 @@
 ﻿using MSDTC.Sample.Api.Interfaces.Services;
+using MSDTC.Sample.Api.Utils;
 using System.Web.Http;
 
 namespace MSDTC.Sample.Api.Controllers
@@ -21,6 +22,7 @@ namespace MSDTC.Sample.Api.Controllers
         /// </summary>
         /// <returns>Just the Id and status code 200</returns>
         [HttpGet]
+        [FeatureToggle("Feature.CreateUsingMSDTC")]
         public IHttpActionResult CreateUsingMSDTC()
         {
             return Ok(_clientService.AddClient("Test Client API"));
